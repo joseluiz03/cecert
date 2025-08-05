@@ -26,7 +26,7 @@ $dataHoraAtual = date('d/m/Y H:i:s');
 $mes = isset($_GET['mes']) ? (int)$_GET['mes'] : (int)date('m');
 $ano = isset($_GET['ano']) ? (int)$_GET['ano'] : (int)date('Y');
 
-$logoPathOriginal = __DIR__ . 'C:\xampp\htdocs\cecert\imagens\logo_ceara_certificacao.png';
+$logoPathOriginal = __DIR__ . DIRECTORY_SEPARATOR . 'imagens' . DIRECTORY_SEPARATOR . 'logo_ceara_certificacao.png';
 if (!file_exists($logoPathOriginal)) {
     die("Erro: Imagem da logo não encontrada em: $logoPathOriginal");
 }

@@ -2,7 +2,6 @@
 session_start();
 include 'conexao.php';
 
-// Redireciona se já estiver logado
 if (isset($_SESSION["admin_logado"])) {
     header("Location: painel.php");
     exit;
@@ -40,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             }
             $stmt->close();
         } else {
-            $erro = "Erro ao preparar consulta.";
+            $erro = "Erro na consulta ao banco.";
         }
     } else {
         $erro = "Preencha usuário e senha.";
@@ -51,13 +50,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Login do Administrador</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
 </head>
 <body>
     <div class="login-container">
-        <img src="./imagens/logo ceara certificação.png" alt="Logo Ceará Certificação" class="logo-img">
+        <img src="./imagens/logo_ceara_certificacao.png" alt="Logo Ceará Certificação" class="logo-img" />
         <h2>Login do Administrador</h2>
 
         <?php if ($erro): ?>
@@ -65,8 +64,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <?php endif; ?>
 
         <form method="post" action="">
-            <input type="text" name="usuario" placeholder="Usuário" required>
-            <input type="password" name="senha" placeholder="Senha" required>
+            <input type="text" name="usuario" placeholder="Usuário" required />
+            <input type="password" name="senha" placeholder="Senha" required />
             <button type="submit">Entrar</button>
         </form>
     </div>

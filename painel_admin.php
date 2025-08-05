@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
     <div class="login-container">
-        <img src="./imagens/logo ceara certificação.png" alt="Logo Ceará Certificação" class="logo-img">
+        <img src="./imagens/logo_ceara_certificacao.png" alt="Logo Ceará Certificação" class="logo-img">
         <h2>Cadastrar Novo Administrador</h2>
         <?php 
         if (isset($sucesso)) echo "<div class='msg-sucesso'>$sucesso</div>";
