@@ -1,9 +1,12 @@
 <?php
 session_start();
+
+// Protege a página
 if (!isset($_SESSION["admin_logado"])) {
     header("Location: index.php");
     exit;
 }
+
 include 'conexao.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

@@ -2,28 +2,52 @@
 session_start();
 include 'conexao.php';
 
-// Se já estiver logado, redireciona direto pro painel (evita redirecionamento infinito)
+// Redireciona se já estiver logado
 if (isset($_SESSION["admin_logado"])) {
     header("Location: painel.php");
     exit;
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $usuario = $mysqli->real_escape_string($_POST["usuario"]);
-    $senha = $mysqli->real_escape_string($_POST["senha"]);
+$erro = "";
 
-    $sql = "SELECT * FROM administradores WHERE usuario = '$usuario' AND senha = '$senha'";
-    $resultado = $mysqli->query($sql);
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $usuario = $_POST['usuario'] ?? '';
+    $senha = $_POST['senha'] ?? '';
 
-    if ($resultado && $resultado->num_rows === 1) {
-        $_SESSION["admin_logado"] = true;
-        header("Location: painel.php");
-        exit;
+    if ($usuario && $senha) {
+        $stmt = $mysqli->prepare("SELECT id, nome, senha FROM administradores WHERE usuario = ?");
+        if ($stmt) {
+            $stmt->bind_param("s", $usuario);
+            $stmt->execute();
+            $stmt->store_result();
+
+            if ($stmt->num_rows === 1) {
+                $stmt->bind_result($id, $nome, $senha_hash);
+                $stmt->fetch();
+
+                if (password_verify($senha, $senha_hash)) {
+                    $_SESSION["admin_logado"] = true;
+                    $_SESSION["admin_id"] = $id;
+                    $_SESSION["admin_nome"] = $nome;
+
+                    header("Location: painel.php");
+                    exit;
+                } else {
+                    $erro = "Senha incorreta.";
+                }
+            } else {
+                $erro = "Usuário não encontrado.";
+            }
+            $stmt->close();
+        } else {
+            $erro = "Erro ao preparar consulta.";
+        }
     } else {
-        $erro = "Usuário ou senha inválidos!";
+        $erro = "Preencha usuário e senha.";
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -35,8 +59,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="login-container">
         <img src="./imagens/logo ceara certificação.png" alt="Logo Ceará Certificação" class="logo-img">
         <h2>Login do Administrador</h2>
-        <?php if (isset($erro)) echo "<div class='msg-erro'>$erro</div>"; ?>
-        <form method="post">
+
+        <?php if ($erro): ?>
+            <p style="color: red; margin-bottom: 10px;"><?php echo htmlspecialchars($erro); ?></p>
+        <?php endif; ?>
+
+        <form method="post" action="">
             <input type="text" name="usuario" placeholder="Usuário" required>
             <input type="password" name="senha" placeholder="Senha" required>
             <button type="submit">Entrar</button>

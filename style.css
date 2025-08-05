@@ -88,3 +88,152 @@ body {
 .icone-erro {
     font-size: 20px;
 }
+
+/* css da tela do admnistrador */
+/* Estilo do Painel do Administrador com Ícones */
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+.painel-header {
+    background-color: #004aad;
+    color: white;
+    padding: 30px 0;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.painel-header h1 {
+    font-size: 2rem;
+}
+
+.painel-header p {
+    margin-top: 6px;
+    font-size: 1rem;
+}
+
+.painel-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.painel-container h2 {
+    font-size: 1.6rem;
+    margin-bottom: 30px;
+    color: #222;
+}
+
+.painel-opcoes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 25px;
+}
+
+.painel-opcao {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s, box-shadow 0.3s;
+}
+
+.painel-opcao:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.painel-opcao a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    color: #004aad;
+    transition: color 0.2s;
+}
+
+.painel-opcao a i {
+    font-size: 1.2rem;
+}
+
+.painel-opcao a.sair {
+    color: #d80000;
+}
+
+.painel-footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+/* ---------- */
+/* Topbar com perfil - A PARTIR DAQUI */
+/* ---------- */
+
+.topbar {
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Inter', sans-serif;
+}
+
+.logo {
+    font-weight: 700;
+    color: #004aad;
+    font-size: 1.2rem;
+}
+
+.perfil-dropdown {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    color: #333;
+    user-select: none;
+}
+
+.perfil-dropdown i {
+    font-size: 24px;
+    color: #004aad;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ddd;
+    padding: 10px 0;
+    border-radius: 6px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    display: none;
+    min-width: 150px;
+    z-index: 1000;
+}
+
+.dropdown-menu a {
+    display: block;
+    color: #333;
+    padding: 8px 20px;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: background-color 0.2s ease;
+}
+
+.dropdown-menu a:hover {
+    background-color: #f4f4f4;
+}
+
+.dropdown-menu.show {
+    display: block;
+}
