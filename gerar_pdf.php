@@ -26,12 +26,10 @@ $dataHoraAtual = date('d/m/Y H:i:s');
 $mes = isset($_GET['mes']) ? (int)$_GET['mes'] : (int)date('m');
 $ano = isset($_GET['ano']) ? (int)$_GET['ano'] : (int)date('Y');
 
-$logoPathOriginal = __DIR__ . DIRECTORY_SEPARATOR . 'imagens' . DIRECTORY_SEPARATOR . 'logo_ceara_certificacao.png';
-if (!file_exists($logoPathOriginal)) {
-    die("Erro: Imagem da logo não encontrada em: $logoPathOriginal");
-}
-$logoPath = 'file://' . realpath($logoPathOriginal);
+// Caminho da imagem via localhost
+$logoPath = 'http://localhost/cecert/imagens/logo_ceara_certificacao.png';
 
+// Consulta ao banco
 $stmt = $mysqli->prepare("
     SELECT e.nome, e.cpf, e.status, p.valor, p.data_pagamento
     FROM pagamentos p
@@ -48,21 +46,10 @@ $resultado = $stmt->get_result();
 
 $total = 0;
 
+// HTML para o PDF
 $html = '
 <style>
-    @page { margin: 80px 50px 80px 50px; }
     body { font-family: Arial, sans-serif; font-size: 12px; }
-    header { position: fixed; top: -60px; left: 0; right: 0; text-align: center; }
-    footer {
-        position: fixed;
-        bottom: -40px;
-        left: 0;
-        right: 0;
-        font-size: 10px;
-        text-align: center;
-        border-top: 1px solid #ccc;
-        padding-top: 5px;
-    }
     table {
         width: 100%;
         border-collapse: collapse;
@@ -83,28 +70,25 @@ $html = '
     }
 </style>
 
-<header>
+<div style="text-align: center;">
     <img src="' . $logoPath . '" width="100"><br>
     <strong>CECERT – Ceará Certificação</strong><br>
     <span>Relatório de Pagamentos – ' . sprintf('%02d', $mes) . '/' . $ano . '</span>
-</header>
+</div>
 
-<footer>
-    Gerado em ' . $dataHoraAtual . ' por ' . htmlspecialchars($admin) . ' | Página {PAGE_NUM} de {PAGE_COUNT}
-</footer>
+<p style="text-align:right; font-size:11px;">Gerado em ' . $dataHoraAtual . ' por ' . htmlspecialchars($admin) . '</p>
 
-<main>
-    <table>
-        <thead>
-            <tr>
-                <th>Empregado</th>
-                <th>CPF</th>
-                <th>Status</th>
-                <th>Valor</th>
-                <th>Data de Pagamento</th>
-            </tr>
-        </thead>
-        <tbody>
+<table>
+    <thead>
+        <tr>
+            <th>Empregado</th>
+            <th>CPF</th>
+            <th>Status</th>
+            <th>Valor</th>
+            <th>Data de Pagamento</th>
+        </tr>
+    </thead>
+    <tbody>
 ';
 
 while ($row = $resultado->fetch_assoc()) {
@@ -138,7 +122,6 @@ $html .= '
         </tr>
     </tbody>
 </table>
-</main>
 ';
 
 // Gerar PDF com DOMPDF
@@ -149,11 +132,6 @@ $dompdf = new Dompdf($options);
 $dompdf->loadHtml($html);
 $dompdf->setPaper('A4', 'portrait');
 $dompdf->render();
-
-// Numeração da página
-$canvas = $dompdf->getCanvas();
-$font = $dompdf->getFontMetrics()->getFont('Arial', 'normal');
-$canvas->page_text(520, 820, "Página {PAGE_NUM} de {PAGE_COUNT}", $font, 8, [0, 0, 0]);
 
 $dompdf->stream("relatorio_pagamentos_{$mes}_{$ano}.pdf", ["Attachment" => false]);
 exit;
